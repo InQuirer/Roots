@@ -44,13 +44,13 @@ public class Node {
 	 * Overrides method implemented from Object.
 	 */
 	public String toString() {
-		String s = "";
+		String s = "fixed: ";
 		for (int[] a : fixed) {
 			s += Arrays.toString(a);
-		} s += "\n";
+		} s += "\nfree: ";
 		for (int[] a : free) {
 			s += Arrays.toString(a);
 		}
-		return s;
+		return s + "\n";
 	}
 }

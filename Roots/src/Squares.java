@@ -23,7 +23,7 @@ public class Squares {
 				square[row/2] = Integer.parseInt(s);
 			}
 			this.squares.add(square);
-		}
+		} System.err.println(fileName);
 	}
 	
 	public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class Squares {
 		ArrayList<Node> promisingNodesList1 = new ArrayList<Node>();
 		for (int[] sq1 : squares) {
 			for (int[] sq2 : squares) {
-				if (sq1 != sq2 && sq1[1] + sq2[0] == 10) {
+				if (sq1 != sq2 && sq1[1] + sq2[0] <= 10) {
 					Node n = new Node();
 					n.fixed.add(sq1); n.fixed.add(sq2);
 					for (int[] sq : squares) {
@@ -65,7 +65,9 @@ public class Squares {
 					int[] sq2 = n.fixed.get(1);
 					if (	sq4 != sq5 &&
 							sq1[3] + sq2[2] + sq4[1] + sq5[0] == 10 &&
-							sq1[2] + sq4[0] <= 10 && sq2[3] + sq5[1] <= 10) {
+							sq1[2] + sq4[0] <= 10 &&
+							sq2[3] + sq5[1] <= 10 &&
+							sq4[3] + sq5[2] <= 10) {
 						Node square = new Node();
 						square.fixed.addAll(n.fixed);
 						square.fixed.add(sq4);
@@ -86,6 +88,7 @@ public class Squares {
 			for (int[] sq3 : n.free) {
 				int[] sq1 = n.fixed.get(0);
 				int[] sq4 = n.fixed.get(2);
+//				System.out.println(n + " " + Arrays.toString(sq3));
 				if (	sq1[2] + sq3[1] + sq4[0] <= 10 &&
 						sq3[3] + sq4[2] <= 10) {
 					Node square = new Node();
@@ -110,7 +113,7 @@ public class Squares {
 						sq5[3] + sq6[2] <= 10) {
 					Node square = new Node();
 					square.fixed.addAll(n.fixed);
-					square.fixed.add(sq6); // insert to 3rd position
+					square.fixed.add(sq6); // insert to 6th position
 					for (int[] sq : n.free) {
 						if (sq != sq6) {
 							square.free.add(sq);
@@ -215,11 +218,9 @@ public class Squares {
 			int[] sq10 = n.fixed.get(9);
 			int[] sq11 = n.free.get(0);
 			int[] sq12 = n.free.get(1);
-			Node node = new Node();
-			node.fixed.addAll(n.fixed);
 			if (	sq8[3] + sq9[2] + sq11[1] + sq12[0] == 10 &&
 					sq7[3] + sq8[2] + sq11[0] <= 10 &&
-					sq9[3] + sq10[2] + sq12[2] <= 10 &&
+					sq9[3] + sq10[2] + sq12[1] <= 10 && //<-mistake was here!
 					sq11[3] + sq12[2] <= 10) {
 				Node answer = new Node();
 				answer.fixed.addAll(n.fixed);
@@ -229,7 +230,7 @@ public class Squares {
 			}
 			if (	sq8[3] + sq9[2] + sq12[1] + sq11[0] == 10 &&
 					sq7[3] + sq8[2] + sq12[0] <= 10 &&
-					sq9[3] + sq10[2] + sq11[2] <= 10 &&
+					sq9[3] + sq10[2] + sq11[1] <= 10 &&
 					sq12[3] + sq11[2] <= 10) {
 				Node answer = new Node();
 				answer.fixed.addAll(n.fixed);
@@ -243,14 +244,14 @@ public class Squares {
 	 * @return true if there is one solution at least
 	 */
 	public boolean run() {
-		boolean run = false;
+		int i = 0;
 		calculate();
 		for (Node n : answers) {
 			if (n.isValid()) {
-				run = true;
+				i++;
 				n.print();
 			}
-		} if(!run) System.err.println("No solutions!");
-		return run;
+		} System.err.println("I have found " + i + " solution(s).\n");
+		return (i == 0) ? false : true;
 	}
 }
